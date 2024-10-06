@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Extension</title>
+    <style>
+        #videoList {
+            list-style-type: none;
+            padding: 0;
+        }
+        .videoItem {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        .TitleAndTime {
+            width: 70%;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            width: 300px;
+        }
+        button {
+            padding: 0 10px;
+            margin: 0 0 0 1px;
+            background-color: #292929; 
+            color: white; 
+            cursor: pointer;
+            height: 30px; 
+            width: 60px;
+            line-height: 30px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">书签</h1>
+    <ul id="videoList"></ul>
+    <script src="popup.js"></script>
+</body>
+</html>
