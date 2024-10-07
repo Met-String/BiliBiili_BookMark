@@ -20,7 +20,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         sendResponse({status: 'success'});
 
     } else if(message.type =='SKIP_TO_VIDEO'){ //跳转
-        const {url, currentTime} = message.url;
+        const {url, currentTime} = message;
         // 页面加载完成后触发跳转
         chrome.tabs.create({ url },function(tab){
             function handleTabUpdate(tabId, changeInfo, updatedTab) {
