@@ -1,4 +1,4 @@
-const loadButton = () => {
+(() => {
     console.log('Content script loaded on this page');
     const playerToolbar = document.querySelector(".bpx-player-control-bottom-right");
     const recordButton = document.createElement("img");
@@ -35,7 +35,7 @@ const loadButton = () => {
                 currentTime
             });
         }
-    });
+    })
 
     // 在其它官方Toolbar按钮加载后再加载本按钮，防止出现提前加载的违和感。
     const CheckButtonLoaded = () => {
@@ -49,9 +49,7 @@ const loadButton = () => {
         }
     }
     CheckButtonLoaded();
-}
-
-loadButton();
+})();
 
 // 在监听到跳转消息时修改当前页面视频时间戳
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
