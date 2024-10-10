@@ -1,34 +1,34 @@
 {
-    "manifest_version": 2,
-    "name": "My Chrome Extension",
-    "version": "1.0",
-    "description": "A simple Chrome extension.",
-    "permissions": [
-      "activeTab",
-      "storage",
-      "tabs"
-    ],
-    "background": {
-      "scripts": ["background.js"],
-      "persistent": false
-    },
-    "browser_action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "16": "icons/icon16.png"
-      }
-    },
-    "icons": {
+  "manifest_version": 2,
+  "name": "BiliBili_Bookmark",
+  "version": "1.0",
+  "description": "书签插件，用于记录B站视频播放进度，视频下方工具栏会多出一个加号图标，点击即可记录。",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
       "16": "icons/icon16.png"
-    },
-    "content_scripts": [
-      {
-        "matches": ["https://www.bilibili.com/video/*"],
-        "js": ["content.js"]
-      }
-    ],
-    "web_accessible_resources": [
-        "icons/plussign.png"
-    ]
-  }
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.bilibili.com/video/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "web_accessible_resources": [
+      "icons/plussign.png"
+  ]
+}
   

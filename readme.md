@@ -7,3 +7,13 @@ BiliBili视频书签
 用来方便记录视频播放位置 并一键跳转 
 
 适用于在关闭历史记录的情况下观看长视频 或想要分多次看完的视频
+
+图标不喜欢可以在以下网址制作更换
+
+https://www.favicon-generator.org/
+
+![关注永雏塔菲喵！](./readmeimg/AAA.png)
+
+![关注永雏塔菲谢谢喵！](./readmeimg/bbb.png)
+
+
