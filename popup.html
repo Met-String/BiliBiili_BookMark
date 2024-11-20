@@ -20,11 +20,28 @@
         body {
             font-family: Arial, sans-serif;
             width: 300px;
+            overflow: hidden;
         }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('ocarina.png');
+            background-size: cover;
+            background-position: bottom; /* 确保图片的底部可见 */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            opacity: 0.4; /* 只设置背景图片的透明度 */
+            z-index: -1; /* 让背景图片位于文字后面 */
+        }
+
         button {
             padding: 0 10px;
             margin: 0 0 0 1px;
-            background-color: #292929; 
+            background-color: #353535; 
             color: white; 
             cursor: pointer;
             height: 30px; 
@@ -32,10 +49,15 @@
             line-height: 30px;
             border-radius: 5px;
         }
+
+        button:hover {
+            background-color: #151515; /* 鼠标悬停时变成更深的粉色 */
+            transform: translateY(-3px); /* 微微向上浮动的效果 */
+        }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">书签</h1>
+    <h1 style="text-align: center;">BiliBookMark</h1>
     <ul id="videoList"></ul>
     <script src="popup.js"></script>
 </body>

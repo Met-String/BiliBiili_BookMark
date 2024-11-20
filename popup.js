@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 创建列表项
                 const li = document.createElement('li');
                 li.className = 'videoItem';
+                // li.style.fontWeight = 'bold';
     
                 // 创建时间戳元素
                 const TitleAndTime = document.createElement('span');
