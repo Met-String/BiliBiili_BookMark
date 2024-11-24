@@ -59,9 +59,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 result[bv].currentTime = currentTime;
                 chrome.storage.local.set({ [bv]: result[bv] });
                 console.log("视频播放进度更新:", {bv, currentTime});
-                // 设置视频追踪中的专属红色 badge
-                chrome.browserAction.setBadgeText({ text: 'Live' });
-                chrome.browserAction.setBadgeBackgroundColor({ color: 'red' });
             }
         });
     }   
