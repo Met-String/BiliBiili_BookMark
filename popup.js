@@ -31,7 +31,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     chrome.storage.local.remove(key, () => li.remove());
                 });
 
-                // 创建跳转按钮
+                // 创建跳转按钮，其原理本质是广播一个SKIP_TO_VIDEO类型的Message。
+                // 之后的工作交由background.js进行处理
+                // background.js通过得到的信息创建新tab，再向新建tab发送包含时间戳的Message
+                // 新建tab的content.js收到Message后，对Video的CurrentTime进行设置
                 const goToButton = document.createElement('button');
                 goToButton.textContent = '跳转';
                 goToButton.style.height = "30px";
