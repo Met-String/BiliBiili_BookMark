@@ -43,7 +43,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         chrome.storage.local.get([bv], (result) => {
             if (result[bv] && result[bv].track === true) {
                 // 返回需要追踪的响应
-                sendResponse({ track: true });
+                sendResponse({ track: true, startTime:result[bv].currentTime});
             } else {
                 // 返回不需要追踪的响应
                 sendResponse({ track: false });
