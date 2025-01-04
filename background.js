@@ -5,9 +5,9 @@ chrome.runtime.onInstalled.addListener(() => {
 // background.js
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.type === 'STORE_VIDEO_INFO') {
-        const {bv, title, currentTime, track} = message;
-        chrome.storage.local.set({[bv] : {currentTime, title, track}}, () => {
-            console.log('Video information saved:', {bv, title, currentTime, track});
+        const {bv, p, title, currentTime, duration, track} = message;
+        chrome.storage.local.set({[`${bv}:${p}`] : {bv, p, currentTime, title, duration, track}}, () => {
+            console.log('Video information saved:', {bv, p, title, currentTime, duration, track});
         });
 
         // 设置更新专属的绿色badge
@@ -39,11 +39,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     // 处理新视频打开时 检测其是否需要追踪的来自Content.js的Message
     } else if(message.type == 'NEW_VIDEO_OPENED'){
-        const bv = message.bv;
-        chrome.storage.local.get([bv], (result) => {
-            if (result[bv] && result[bv].track === true) {
+        const key = message.key;
+        chrome.storage.local.get([key], (result) => {
+            if (result[key] && result[key].track === true) {
                 // 返回需要追踪的响应
-                sendResponse({ track: true, startTime:result[bv].currentTime});
+                sendResponse({ track: true, startTime:result[key].currentTime});
             } else {
                 // 返回不需要追踪的响应
                 sendResponse({ track: false });
@@ -53,12 +53,12 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         return true;
 
     } else if(message.type == 'UPDATE_VIDEO_PROGRESS'){
-        const {bv, currentTime} = message
-        chrome.storage.local.get([bv], (result) => {
-            if (result[bv]) {
-                result[bv].currentTime = currentTime;
-                chrome.storage.local.set({ [bv]: result[bv] });
-                console.log("视频播放进度更新:", {bv, currentTime});
+        const {key, currentTime} = message
+        chrome.storage.local.get([key], (result) => {
+            if (result[key]) {
+                result[key].currentTime = currentTime;
+                chrome.storage.local.set({ [key]: result[key] });
+                console.log("视频播放进度更新:", {key, currentTime});
             }
         });
     }   

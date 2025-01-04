@@ -24,17 +24,30 @@
         const titleElement = document.querySelector('.video-info-title-inner > h1');
         const video = document.querySelector('video');
         if (titleElement && video){
-            const bv = window.location.href.split('/video/')[1].split('/')[0];
-            const title = titleElement.title;
+            console.log("Current Video URL:", window.location.href)
+            const url = new URL(window.location.href);
+            const bv = url.pathname.split('/')[2]; // 假设路径为 /video/BVxxxxxx
+            // 检测视频是否为分P
+            let p = 0;
+            let title = titleElement.title;
+            const params = url.searchParams;
+            if(params.has("p")){
+                p = params.get("p")
+                title = `${title}(P${p})`
+            }
+            
             const currentTime = video.currentTime;
+            const duration = video.duration;
             // 进行可能的手动倒带。
             lastSavedTime = video.currentTime;
             // 发送书签信息到 background.js
-            chrome.runtime.sendMessage({         
+            chrome.runtime.sendMessage({
                 type: 'STORE_VIDEO_INFO',
-                bv,
                 title,
+                bv,
+                p,
                 currentTime,
+                duration,
                 // 该视频是否需要追踪
                 track : true
             });
@@ -55,14 +68,24 @@
     CheckButtonLoaded();
 })();
 
+// 下面部分处理视频的播放进度追踪。
 // 视频播放的保存起始点，默认只能随视频播放进度增长而不能倒带，必须通过手动点击“+”按钮来人为进行倒带。
 let lastSavedTime;
 (() => {
     // 新视频打开后，向background.js验证其是否需要追踪。
-    const bv = window.location.href.split('/video/')[1].split('/')[0];
+    const url = new URL(window.location.href);
+    const bv = url.pathname.split('/')[2]; // 假设路径为 /video/BVxxxxxx
+    // 检测视频是否为分P
+    let p = 0;
+    const params = url.searchParams;
+    if(params.has("p")){
+        p = params.get("p")
+    }
+    // 计算出Key
+    const key = `${bv}:${p}`
     chrome.runtime.sendMessage({
         type: 'NEW_VIDEO_OPENED',
-        bv,
+        key,
     },(response) => {
         // 如果需要追踪，那么启动追踪协议
         if (response && response.track == true){
@@ -70,7 +93,7 @@ let lastSavedTime;
             const video = document.querySelector('video');
             video.currentTime = response.startTime - 5;
             lastSavedTime = video.currentTime;
-            console.log("检测到本视频有书签, 开始追踪视频进度:", {bv}, "空降进度:", response.startTime)
+            console.log("检测到本视频有书签, 开始追踪视频进度:", {key}, "空降进度:", response.startTime)
             // TimeUpdate是<video> 或 <audio> 元素自带的一个事件，它会在视频的播放位置发生变化时触发。
             video.addEventListener('timeupdate', () => {
                 const currentTime = video.currentTime;
@@ -79,13 +102,13 @@ let lastSavedTime;
                     lastSavedTime = currentTime;
                     chrome.runtime.sendMessage({
                         type: 'UPDATE_VIDEO_PROGRESS',
-                        bv,
+                        key,
                         currentTime
                     });
                 }
             });
         } else {
-            console.log("本视频设置为无需追踪进度:", {bv})
+            console.log("本视频设置为无需追踪进度:", {key})
         }
     });
 })();
