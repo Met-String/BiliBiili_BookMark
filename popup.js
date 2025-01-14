@@ -72,8 +72,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 const duartion = `${duration_hours}:${duration_minutes}:${duration_seconds}`
                 RightTimeStamp.innerHTML = duartion;
                 secondLine.append(LeftTimeStamp, RightTimeStamp)
+
+                // 创建第三行：进度条
+                const thirdLine = document.createElement('div');
+                thirdLine.className = "thirdLine"
+                // 创建进度条容器
+                const progressBar = document.createElement('div');
+                progressBar.className = 'progress-bar';
+                // 创建进度条填充部分
+                const progressFill = document.createElement('div');
+                progressFill.className = 'progress-fill';
+                // 计算视频播放百分比
+                const percentage = (videoItem.currentTime / videoItem.duration) * 100
+                progressFill.style.width = `${percentage}%`;
+                progressBar.appendChild(progressFill);
+                thirdLine.appendChild(progressBar);
                 // 将 BV 号和按钮添加到列表项
-                li.append(firstLine, secondLine)
+                li.append(firstLine, secondLine, thirdLine);
+
+
+
                 // 将列表项添加到 ul 列表中
                 videoList.appendChild(li);
             }

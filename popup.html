@@ -16,8 +16,11 @@
         }
         .videoItem {
             margin: 10px 0;
+            padding: 5px 5px;
             /* display: flex; */
             justify-content: space-between;
+            border-radius: 3px;
+            border: 1px solid #dcdcdc;
         }
         .TitleAndTime {
             /* width: 70%; */
@@ -26,6 +29,20 @@
         .secondLine {
             display: flex;
             justify-content: space-between;
+        }
+
+        /* 进度条背景 */
+        .progress-bar {
+            width: 100%; /* 进度条的总宽度 */
+            height: 3px; /* 进度条的高度 */
+            background-color: #f0f0f0; /* 背景颜色 */
+            margin-top: 3px; /* 和上方内容分开 */
+        }
+        /* 进度条填充 */
+        .progress-fill {
+            height: 100%;
+            background-color: #007bff; /* 蓝色表示播放进度 */
+            width: 0%; /* 动态控制宽度，初始为 0 */
         }
 
         body {

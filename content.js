@@ -29,7 +29,7 @@
             const bv = url.pathname.split('/')[2]; // 假设路径为 /video/BVxxxxxx
             // 检测视频是否为分P
             let p = 0;
-            let title = titleElement.title;
+            let title = `[V3]${titleElement.title}`;
             const params = url.searchParams;
             if(params.has("p")){
                 p = params.get("p")
@@ -41,7 +41,9 @@
             // 进行可能的手动倒带。
             lastSavedTime = video.currentTime;
             // 发送书签信息到 background.js
+            const key = `${bv}:${p}`
             chrome.runtime.sendMessage({
+                key: key,
                 type: 'STORE_VIDEO_INFO',
                 title,
                 bv,
@@ -51,6 +53,7 @@
                 // 该视频是否需要追踪
                 track : true
             });
+            addPlayerTracker(video, key)
         }
     })
 
@@ -88,25 +91,11 @@ let lastSavedTime;
         key,
     },(response) => {
         // 如果需要追踪，那么启动追踪协议
-        if (response && response.track == true){
-            // 在刷新后同样设置视频播放位置为记录的时间。
+        if (response && response.track == true) {
+            // 首先设置视频播放位置为记录的时间。
             const video = document.querySelector('video');
             video.currentTime = response.startTime - 5;
-            lastSavedTime = video.currentTime;
-            console.log("检测到本视频有书签, 开始追踪视频进度:", {key}, "空降进度:", response.startTime)
-            // TimeUpdate是<video> 或 <audio> 元素自带的一个事件，它会在视频的播放位置发生变化时触发。
-            video.addEventListener('timeupdate', () => {
-                const currentTime = video.currentTime;
-                // 每次视频播放进度跨度达到5S时，触发进度保存消息。
-                if (currentTime - lastSavedTime > 5){
-                    lastSavedTime = currentTime;
-                    chrome.runtime.sendMessage({
-                        type: 'UPDATE_VIDEO_PROGRESS',
-                        key,
-                        currentTime
-                    });
-                }
-            });
+            addPlayerTracker(video, key)
         } else {
             console.log("本视频设置为无需追踪进度:", {key})
         }
@@ -125,4 +114,23 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     }
 });
 
+// 启动追踪协议。
+function addPlayerTracker(video, key){
+    console.log("检测到本视频有书签, 开始追踪视频进度:", {key})
+    // 记录视频每个上一次进度记录时间。
+    lastSavedTime = video.currentTime;
+    // TimeUpdate是<video> 或 <audio> 元素自带的一个事件，它会在视频的播放位置发生变化时触发。
+    video.addEventListener('timeupdate', () => {
+        const currentTime = video.currentTime;
+        // 每次视频播放进度跨度达到5S时，触发进度保存消息。
+        if (currentTime - lastSavedTime > 5){
+            lastSavedTime = currentTime;
+            chrome.runtime.sendMessage({
+                type: 'UPDATE_VIDEO_PROGRESS',
+                key,
+                currentTime
+            });
+        }
+    });
+}
 
