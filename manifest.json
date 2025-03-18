@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "BiliBili_Bookmark",
+  "name": "BBB!Mark",
   "version": "1.0",
   "description": "书签插件，用于记录B站视频播放进度，视频下方工具栏会多出一个加号图标，点击即可记录。",
   "permissions": [
@@ -29,7 +29,8 @@
   ],
   "web_accessible_resources": [
       "icons/plussign.png",
-      "ocarina.png"
+      "ocarina.png",
+      "Babel.png"
   ]
 }
   

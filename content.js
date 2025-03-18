@@ -41,8 +41,12 @@
             // 进行可能的手动倒带。
             lastSavedTime = video.currentTime;
             // 发送书签信息到 background.js
-            const key = `${bv}:${p}`
+            const recordTime = Math.floor(Date.now() / 1000)
+            const key = `${recordTime}:${bv}:${p}`
+            console.log('Content.Js:准备向BackGround.js发送书签信息')
+            console.log('Video information:', {recordTime, key, bv, p, title, currentTime, duration});
             chrome.runtime.sendMessage({
+                recordTime,
                 key: key,
                 type: 'STORE_VIDEO_INFO',
                 title,

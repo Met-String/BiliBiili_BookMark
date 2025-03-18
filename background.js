@@ -5,9 +5,9 @@ chrome.runtime.onInstalled.addListener(() => {
 // background.js
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.type === 'STORE_VIDEO_INFO') {
-        const {key, bv, p, title, currentTime, duration, track} = message;
-        chrome.storage.local.set({[key] : {bv, p, currentTime, title, duration, track}}, () => {
-            console.log('Video information saved:', {key, bv, p, title, currentTime, duration, track});
+        const {recordTime, key, bv, p, title, currentTime, duration, track} = message;
+        chrome.storage.local.set({[key] : {recordTime, bv, p, currentTime, title, duration, track}}, () => {
+            console.log('Video information saved:', {recordTime, key, bv, p, title, currentTime, duration, track});
         });
 
         // 设置更新专属的绿色badge

@@ -48,7 +48,9 @@
         body {
             font-family: Arial, sans-serif;
             width: 300px;
-            overflow: hidden;
+        }
+        body::-webkit-scrollbar {
+            display: none; /* 适用于 Webkit 浏览器（Chrome、Edge、Safari） */
         }
         body::before {
             content: "";
@@ -57,7 +59,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: url('ocarina.png');
+            /* background-image: url('ocarina.png'); */
+            background-image: url('Babel.png');
             background-size: cover;
             background-position: bottom; /* 确保图片的底部可见 */
             background-repeat: no-repeat;
