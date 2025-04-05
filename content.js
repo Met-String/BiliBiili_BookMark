@@ -1,26 +1,28 @@
 (() => {
     console.log('Content script loaded on this page');
     const playerToolbar = document.querySelector(".bpx-player-control-bottom-right");
-    const recordButton = document.createElement("img");
-    recordButton.src = chrome.runtime.getURL("icons/plussign.png");
+    // 创建嵌入页面的按钮容器 和BiliBili官方样式的同一行其它按钮的类型对齐。
+    const recordButtonContainer = document.createElement("div");
+    recordButtonContainer.className = "bpx-player-ctrl-btn"
+    recordButtonContainer.style.cursor = "Pointer";
+    // recordButtonContainer.style.backgroundColor = "red";
+    recordButtonContainer.style.marginRight = "10px";
 
+    const recordButton = document.createElement("img");
+    recordButton.src = chrome.runtime.getURL("icons/icons-plus-pink.png");
     recordButton.style.cursor = "Pointer";
     recordButton.style.height = "22px";
-    recordButton.style.border = "0 solid transparent";
-    recordButton.style.borderWidth = "0px 17px 0px 15px";
-    recordButton.style.transform = "scale(0.7)";
-    recordButton.style.filter = "brightness(0.8)"; 
 
     // 悬停效果
-    recordButton.addEventListener("mouseover", () => {
+    recordButtonContainer.addEventListener("mouseover", () => {
         recordButton.style.filter = "brightness(1.2)";
     });
-    recordButton.addEventListener("mouseout", () => {
+    recordButtonContainer.addEventListener("mouseout", () => {
         recordButton.style.filter = "brightness(0.8)";
     });
 
     // 点击以添加书签
-    recordButton.addEventListener("click", () => {
+    recordButtonContainer.addEventListener("click", () => {
         const titleElement = document.querySelector('.video-info-title-inner > h1');
         const video = document.querySelector('video');
         if (titleElement && video){
@@ -61,12 +63,14 @@
         }
     })
 
+    recordButtonContainer.appendChild(recordButton)
+
     // 在其它官方Toolbar按钮加载后再加载本按钮，防止出现提前加载的违和感。
     const CheckButtonLoaded = () => {
         // 监控目标是调整视频分辨率的按钮
         const targetNode = document.querySelector(".bpx-player-ctrl-quality-result");
         if (targetNode) {
-            playerToolbar.insertBefore(recordButton, playerToolbar.firstChild);
+            playerToolbar.insertBefore(recordButtonContainer, playerToolbar.firstChild);
         } else {
             // 如果节点还未加载，持续检查
             setTimeout(CheckButtonLoaded, 100);
