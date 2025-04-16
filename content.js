@@ -1,6 +1,7 @@
 (() => {
     console.log('Content script loaded on this page');
     const playerToolbar = document.querySelector(".bpx-player-control-bottom-right");
+
     // 创建嵌入页面的按钮容器 和BiliBili官方样式的同一行其它按钮的类型对齐。
     const recordButtonContainer = document.createElement("div");
     recordButtonContainer.className = "bpx-player-ctrl-btn"
@@ -10,7 +11,6 @@
 
     const recordButton = document.createElement("img");
     recordButton.src = chrome.runtime.getURL("icons/icons-plus-pink.png");
-    recordButton.style.cursor = "Pointer";
     recordButton.style.height = "22px";
 
     // 悬停效果

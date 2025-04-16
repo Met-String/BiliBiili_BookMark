@@ -95,4 +95,19 @@ document.addEventListener('DOMContentLoaded', function() {
             videoList.appendChild(li);
         }
     });
+
+    // 为下载按钮添加点击事件监听器
+    document.getElementById('downloadButton').addEventListener('click', () => {
+        chrome.storage.local.get(null, (items) => {
+        // 创建一个 Blob 对象，包含要下载的数据
+        const blob = new Blob([JSON.stringify(items)], { type: 'application/json' });
+        // 创建一个 URL 对象，用于表示 Blob 对象
+        const url = URL.createObjectURL(blob);
+        // 创建一个 <a> 元素，用于触发下载</a>
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'BBVBookmarks.json';
+        link.click();
+        })
+    })
 });
