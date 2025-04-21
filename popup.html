@@ -69,7 +69,7 @@
             z-index: -1; /* 让背景图片位于文字后面 */
         }
 
-        button {
+        .itemButton {
             padding: 0 10px;
             margin: 0 0 0 1px;
             background-color: #353535; 
@@ -80,17 +80,40 @@
             line-height: 30px;
             border-radius: 5px;
         }
-
-        button:hover {
+        .itemButton:hover {
             background-color: #151515; /* 鼠标悬停时变成更深的粉色 */
             transform: translateY(-3px); /* 微微向上浮动的效果 */
+        }
+
+        .configButton {
+            border: none;
+            background: transparent;
+            
+        }
+        .configButtonIcon {
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 15%;
+            transition: background-color 0.3s ease; /* 平滑过渡 */
+        }
+        .configButtonIcon:hover {
+            background-color: #9c9c9cb6; /* 鼠标悬停时变成更深的粉色 */
+            border-radius: 15%;
         }
     </style>
 </head>
 <body>
     <div style="display: flex; justify-content: space-between;align-items: center;">
         <h1 style="display: inline;">BBB!Mark</h1>
-        <button style="display: inline;" id="downloadButton">下载</button>
+        <div>
+            <button style="display: inline;" class="configButton">
+                <img src="icons/download-gpt.png" id="downloadButtonIcon" class="configButtonIcon">
+            </button>
+            <button style="display: inline;" class="configButton">
+                <img src="icons/upload-gpt.png"  id="uploadButtonIcon" class="configButtonIcon">
+            </button>
+        </div>
     </div>
     
     <ul id="videoList"></ul>

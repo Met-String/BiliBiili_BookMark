@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             buttonArea.className = "buttonArea";
             // 创建删除按钮
             const deleteButton = document.createElement('button');
+            deleteButton.className = 'itemButton';
             deleteButton.style.height = "30px";
             deleteButton.textContent = '删除';
             deleteButton.type = 'button';
@@ -36,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // background.js捕捉后，通过得到的信息创建新tab，再向新tab的contest.js发送包含时间戳的Message。
             // 新建tab的content.js收到Message后，对Video的CurrentTime进行设置。
             const goToButton = document.createElement('button');
+            goToButton.className = 'itemButton';
             goToButton.textContent = '跳转';
             goToButton.type = 'button';
             goToButton.style.height = "30px";
@@ -89,25 +91,50 @@ document.addEventListener('DOMContentLoaded', function() {
             // 将 BV 号和按钮添加到列表项
             li.append(firstLine, secondLine, thirdLine);
 
-
-
             // 将列表项添加到 ul 列表中
             videoList.appendChild(li);
         }
     });
 
     // 为下载按钮添加点击事件监听器
-    document.getElementById('downloadButton').addEventListener('click', () => {
-        chrome.storage.local.get(null, (items) => {
-        // 创建一个 Blob 对象，包含要下载的数据
-        const blob = new Blob([JSON.stringify(items)], { type: 'application/json' });
-        // 创建一个 URL 对象，用于表示 Blob 对象
-        const url = URL.createObjectURL(blob);
-        // 创建一个 <a> 元素，用于触发下载</a>
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'BBVBookmarks.json';
-        link.click();
+    document.getElementById('downloadButtonIcon').addEventListener('click', () => {
+            chrome.storage.local.get(null, (items) => {
+            // 创建一个 Blob 对象，包含要下载的数据
+            const blob = new Blob([JSON.stringify(items)], { type: 'application/json' });
+            // 创建一个 URL 对象，用于表示 Blob 对象
+            const url = URL.createObjectURL(blob);
+            // 创建一个 <a> 元素，用于触发下载</a>
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'BBVBookmarks.json';
+            link.click();
         })
     })
+
+    // 为上传按钮添加点击事件监听器
+    document.getElementById('uploadButtonIcon').addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.click();
+
+        input.addEventListener('change', () => {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const data = JSON.parse(reader.result);
+                    chrome.storage.local.set(data, () => {
+                        console.log("导入成功！", data);
+                    });
+                } catch (e) {
+                    console.error("上传失败：JSON 文件格式不合法", e);
+                }
+            };
+            reader.readAsText(file);
+        });
+    })
+
 });
