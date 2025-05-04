@@ -63,3 +63,24 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         });
     }   
 });
+
+setInterval(() => {
+    // 向远程服务器发起同步请求
+    chrome.storage.local.get(null, (items) => {
+        console.log("准备发送的数据：", JSON.stringify(items, null, 2));
+        fetch('http://localhost:8080/sync', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(items)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('响应数据:', data);
+        })
+        .catch(error => {
+            console.error('请求失败:', error);
+        });
+    })
+}, 1000 * 60); // 每60秒钟一次

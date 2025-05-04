@@ -136,5 +136,4 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.readAsText(file);
         });
     })
-
 });
