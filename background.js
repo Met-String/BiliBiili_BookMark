@@ -11,11 +11,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         });
 
         // 设置更新专属的绿色badge
-        chrome.browserAction.setBadgeText({ text: '更新!' });
-        chrome.browserAction.setBadgeBackgroundColor({ color: 'green' });
+        chrome.action.setBadgeText({ text: '更新!' });
+        chrome.action.setBadgeBackgroundColor({ color: 'green' });
         // 通过在N秒后设置TEXT为空来移除徽章。
         setTimeout(() => {
-            chrome.browserAction.setBadgeText({ text: '' });
+            chrome.action.setBadgeText({ text: '' });
         }, 3000);
         sendResponse({status: 'success'});
 

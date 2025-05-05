@@ -1,5 +1,5 @@
 (() => {
-    console.log('Content script loaded on this page');
+    console.log('BBBMark已在此页面加载。');
     const playerToolbar = document.querySelector(".bpx-player-control-bottom-right");
 
     // 创建嵌入页面的按钮容器 和BiliBili官方样式的同一行其它按钮的类型对齐。
