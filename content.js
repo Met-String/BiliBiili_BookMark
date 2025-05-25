@@ -10,6 +10,7 @@
     recordButtonContainer.style.marginRight = "10px";
 
     const recordButton = document.createElement("img");
+    recordButton.classList.add("recordButtonContainer")
     recordButton.src = chrome.runtime.getURL("icons/icons-plus-pink.png");
     recordButton.style.height = "22px";
 
