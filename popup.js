@@ -1,13 +1,35 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 初始化壁纸
+    chrome.storage.local.get('wallpaper', (result) => {
+        if (result.wallpaper) {
+            document.body.style.setProperty('--wallpaper', `url(${result.wallpaper})`);
+            console.log("壁纸初始化完成.");
+        }else{
+            console.log("当前为默认壁纸.");
+        }
+    });
     // 获取要展示列表的 DOM 元素
     const videoList = document.getElementById('videoList');
+    const BATCH_SIZE = 10; // 每次加载的条目数
+    let bookmarks = [];
+    let renderedCount = 0;
 
     // 从 chrome.storage.local 获取存储的 BV 号和时间
     chrome.storage.local.get(null, (items) => {
-        let bookmarks = Object.entries(items);
+        bookmarks = Object.entries(items);
         bookmarks.sort((a, b) =>  b[1].recordTime - a[1].recordTime);
-        // 遍历存储的每个键值对
-        for (let [key, videoItem] of bookmarks) {
+        renderBatch();
+        // 只有当条目数大于BATCH_SIZE时才监听滚动事件
+        if (bookmarks.length > BATCH_SIZE) {
+            videoList.addEventListener('scroll', onScroll);
+        }
+    });
+
+    // 渲染一批书签
+    function renderBatch() {
+        const end = Math.min(renderedCount + BATCH_SIZE, bookmarks.length);
+        for (let i = renderedCount; i < end; i++) {
+            const [key, videoItem] = bookmarks[i];
             // 创建列表项
             const li = document.createElement('li');
             li.className = 'videoItem';
@@ -16,16 +38,15 @@ document.addEventListener('DOMContentLoaded', function() {
             const firstLine = document.createElement('div');
             firstLine.className = 'firstLine';
             //创建Title元素
-            const TitleAndTime = document.createElement('div');
-            TitleAndTime.className = "TitleAndTime";
-            TitleAndTime.innerHTML = `${videoItem.title}`;
+            const Title = document.createElement('div');
+            Title.className = "Title";
+            Title.innerHTML = `${videoItem.title}`;
             // 创建按钮区域
             const buttonArea = document.createElement('div');
             buttonArea.className = "buttonArea";
             // 创建删除按钮
             const deleteButton = document.createElement('button');
             deleteButton.className = 'itemButton';
-            deleteButton.style.height = "30px";
             deleteButton.textContent = '删除';
             deleteButton.type = 'button';
             deleteButton.addEventListener('click', () => {
@@ -40,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
             goToButton.className = 'itemButton';
             goToButton.textContent = '跳转';
             goToButton.type = 'button';
-            goToButton.style.height = "30px";
             // 监听点击事件：跳转
             let url = `https://www.bilibili.com/video/${videoItem.bv}`;
             if(videoItem.p != 0){
@@ -54,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
             buttonArea.append(goToButton, deleteButton)
-            firstLine.append(TitleAndTime, buttonArea)
+            firstLine.append(Title, buttonArea)
 
             // 创建第二行:时间戳
             const secondLine = document.createElement('div');
@@ -94,7 +114,20 @@ document.addEventListener('DOMContentLoaded', function() {
             // 将列表项添加到 ul 列表中
             videoList.appendChild(li);
         }
-    });
+        renderedCount = end;
+    }
+
+    // 监听滚动事件，实现懒加载（无限滚动）
+    function onScroll() {
+        // 判断是否接近底部（20px阈值）
+        if (videoList.scrollTop + videoList.clientHeight >= videoList.scrollHeight - 20) {
+            renderBatch();
+            // 如果全部加载完毕，移除监听器
+            if (renderedCount >= bookmarks.length) {
+                videoList.removeEventListener('scroll', onScroll);
+            }
+        }
+    }
 
     // 为下载按钮添加点击事件监听器
     document.getElementById('downloadButtonIcon').addEventListener('click', () => {
@@ -136,5 +169,21 @@ document.addEventListener('DOMContentLoaded', function() {
             reader.readAsText(file);
         });
     })
-
+    // 为壁纸按钮添加点击事件监听器
+    document.getElementById('wallpaperButtonIcon').addEventListener('click', () => {
+        document.getElementById('wallpaperFileInput').click();
+    })
+    // 为壁纸文件输入框添加点击事件监听器
+    document.getElementById('wallpaperFileInput').addEventListener('change', () => {
+        const file = document.getElementById('wallpaperFileInput').files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            chrome.storage.local.set({ wallpaper: e.target.result }, () => {
+                console.log("设置壁纸成功！");
+            });
+            document.body.style.setProperty('--wallpaper', `url(${e.target.result})`);
+        }
+        reader.readAsDataURL(file);
+        console.log("reader.result");
+    })
 });

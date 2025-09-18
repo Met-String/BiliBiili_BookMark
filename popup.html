@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Extension</title>
     <style>
         #videoList {
@@ -12,17 +11,15 @@
         .firstLine {
             display: flex;
             justify-content: space-between;
-            padding: 3px 0;
+            margin: 3px 0;
         }
         .videoItem {
             margin: 10px 0;
             padding: 5px 5px;
-            /* display: flex; */
-            justify-content: space-between;
             border-radius: 3px;
-            border: 1px solid #dcdcdc;
+            border: 1px solid #000000;
         }
-        .TitleAndTime {
+        .Title {
             /* width: 70%; */
             width: 180px;
         }
@@ -59,33 +56,31 @@
             left: 0;
             right: 0;
             bottom: 0;
-            /* background-image: url('ocarina.png'); */
-            background-image: url('Babel.png');
+            /* background-image: url('Babel.png'); */
+            background-image: var(--wallpaper, url('Babel.png'));
             background-size: cover;
             background-position: bottom; /* 确保图片的底部可见 */
             background-repeat: no-repeat;
-            background-attachment: fixed;
             opacity: 0.4; /* 只设置背景图片的透明度 */
             z-index: -1; /* 让背景图片位于文字后面 */
         }
-
         .itemButton {
-            padding: 0 10px;
             margin: 0 0 0 1px;
             background-color: #353535; 
             color: white; 
             cursor: pointer;
             height: 30px; 
             width: 50px;
-            line-height: 30px;
-            border-radius: 5px;
+            border-radius: 12px;
         }
         .itemButton:hover {
-            background-color: #151515; /* 鼠标悬停时变成更深的粉色 */
-            transform: translateY(-3px); /* 微微向上浮动的效果 */
+            background-color: #151515; /* 鼠标悬停时颜色加深 */
+            transform: translateY(-2px); /* 微微向上浮动 */
         }
         .configButton {
             border: none;
+            margin: 0 0px;
+            padding: 0 0px;
             background: transparent;
         }
         .configButtonIcon {
@@ -93,31 +88,33 @@
             width: 32px;
             height: 32px;
             border-radius: 15%;
-            transition: background-color 0.3s ease; /* 平滑过渡 */
+            transition: background-color 0.3s; /* 平滑过渡 */
         }
         .configButtonIcon:hover {
-            background-color: #9c9c9cb6; /* 鼠标悬停时变成更深的粉色 */
-            border-radius: 15%;
+            background-color: #9c9c9cb9; /* 鼠标悬停时变成更深的颜色 */
         }
     </style>
 </head>
 <body>
-    <div style="display: flex; justify-content: space-between;align-items: center;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
         <div>        
             <h1 style="display: inline;">BBB!Mark</h1>
-            <span style="display: inline;">Ver 1.1.0</span>
+            <span>Ver 1.1.0</span>
         </div>
         <div>
-            <button style="display: inline;" class="configButton">
-                <img src="icons/download-gpt.png" id="downloadButtonIcon" class="configButtonIcon">
+            <button class="configButton">
+                <img src="icons/icon-download.png" id="downloadButtonIcon" class="configButtonIcon">
             </button>
-            <button style="display: inline;" class="configButton">
-                <img src="icons/upload-gpt.png"  id="uploadButtonIcon" class="configButtonIcon">
+            <button class="configButton">
+                <img src="icons/icon-upload.png"  id="uploadButtonIcon" class="configButtonIcon">
+            </button>
+            <button class="configButton">
+                <img src="icons/icon-wallpaper.png"  id="wallpaperButtonIcon" class="configButtonIcon">
             </button>
         </div>
     </div>
-    
     <ul id="videoList"></ul>
     <script src="popup.js"></script>
+    <input type="file" id="wallpaperFileInput" style="display:none" accept="image/*">
 </body>
 </html>

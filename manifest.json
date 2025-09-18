@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "BiliBili 视频书签",
-  "version": "1.0",
+  "version": "1.0.1",
   "short description": "简洁地将B站视频加入书签，并支持播放进度追踪、视频跳转、书签导入导出。",
   "description": "启用插件后，视频下方工具栏中会出现一个粉色加号按钮，点击可将视频加入书签、并开始追踪当前播放进度。\n支持将书签记录导出为JSON文件，并重新导入插件，以便于备份和跨设备转移。\n支持普通视频和分P视频，暂不支持电影、番剧类视频。",
   "current_locale": "zh_CN",
@@ -34,7 +34,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources" :["icons/icons-plus-pink.png", "ocarina.png", "Babel.png"],
+      "resources" :["icons/icons-plus-pink.png"],
       "matches" :["<all_urls>"]
     } 
   ]
